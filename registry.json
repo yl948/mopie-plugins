@@ -16,7 +16,7 @@
           "changeLog": "初始版本，提供基础过滤器和排序规则配置",
           "updatedAt": "2026-07-23T00:00:00Z",
           "minAppVersion": "1.0.0",
-          "downloadUrl": "https://github.com/yaoxiaoyuan/mopie-plugins/releases/download/filter_rules-v1.0/filter_rules.zip"
+          "downloadUrl": "https://github.com/yl948/mopie-plugins/releases/download/filter_rules-v1.0/filter_rules.zip"
         }
       ],
       "configField": [],
