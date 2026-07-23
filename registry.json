@@ -1,0 +1,28 @@
+{
+  "plugins": [
+    {
+      "name": "filter_rules",
+      "title": "过滤器及排序规则配置下载",
+      "author": "NaNaKo_",
+      "description": "应疯佬需求，提供过滤器及排序规则配置下载，点击下方帮助按钮查看说明。",
+      "latestVersion": "1.0",
+      "logoUrl": "",
+      "githubUrl": "https://github.com/yaoxiaoyuan/mopie-plugins",
+      "helpDocUrl": "https://github.com/yaoxiaoyuan/mopie-plugins/tree/main/plugins/filter_rules",
+      "payImageUrl": "",
+      "versions": [
+        {
+          "version": "1.0",
+          "changeLog": "初始版本，提供基础过滤器和排序规则配置",
+          "updatedAt": "2026-07-23T00:00:00Z",
+          "minAppVersion": "1.0.0",
+          "downloadUrl": "https://github.com/yaoxiaoyuan/mopie-plugins/releases/download/filter_rules-v1.0/filter_rules.zip"
+        }
+      ],
+      "configField": [],
+      "dependencies": {
+        "appVersion": ">=1.0.0"
+      }
+    }
+  ]
+}
