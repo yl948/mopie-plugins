@@ -7,8 +7,8 @@
       "description": "应疯佬需求，提供过滤器及排序规则配置下载，点击下方帮助按钮查看说明。",
       "latestVersion": "1.0",
       "logoUrl": "",
-      "githubUrl": "https://github.com/yaoxiaoyuan/mopie-plugins",
-      "helpDocUrl": "https://github.com/yaoxiaoyuan/mopie-plugins/tree/main/plugins/filter_rules",
+      "githubUrl": "https://github.com/yl948/mopie-plugins",
+      "helpDocUrl": "https://github.com/yl948/mopie-plugins/tree/main/plugins/filter_rules",
       "payImageUrl": "",
       "versions": [
         {
@@ -22,6 +22,193 @@
       "configField": [],
       "dependencies": {
         "appVersion": ">=1.0.0"
+      }
+    },
+    {
+      "name": "explore-services",
+      "title": "探索服务聚合",
+      "author": "Mopie",
+      "description": "聚合 Bilibili、腾讯视频、CCTV、芒果TV、咪咕视频和 Bangumi 的公开影视探索目录。",
+      "latestVersion": "0.3.0-beta",
+      "logoUrl": "",
+      "githubUrl": "https://github.com/yl948/mopie-plugins",
+      "helpDocUrl": "https://github.com/yl948/mopie-plugins/tree/main/plugins/explore-services",
+      "payImageUrl": "",
+      "versions": [
+        {
+          "version": "0.3.0-beta",
+          "changeLog": "初始发布",
+          "updatedAt": "2026-09-05T17:21:47Z",
+          "minAppVersion": "1.11.0",
+          "downloadUrl": "https://github.com/yl948/mopie-plugins/releases/download/explore-services-0.3.0-beta/explore-services.zip"
+        }
+      ],
+      "configField": [
+        {
+          "fieldName": "bilibili_enabled",
+          "fieldType": "Bool",
+          "label": "启用 Bilibili",
+          "defaultValue": true
+        },
+        {
+          "fieldName": "tencent_enabled",
+          "fieldType": "Bool",
+          "label": "启用腾讯视频",
+          "defaultValue": true
+        },
+        {
+          "fieldName": "cctv_enabled",
+          "fieldType": "Bool",
+          "label": "启用 CCTV",
+          "defaultValue": true
+        },
+        {
+          "fieldName": "mango_enabled",
+          "fieldType": "Bool",
+          "label": "启用芒果TV",
+          "defaultValue": true
+        },
+        {
+          "fieldName": "migu_enabled",
+          "fieldType": "Bool",
+          "label": "启用咪咕视频",
+          "defaultValue": true
+        },
+        {
+          "fieldName": "bangumi_enabled",
+          "fieldType": "Bool",
+          "label": "启用 Bangumi",
+          "defaultValue": true
+        },
+        {
+          "fieldName": "bangumi_proxy",
+          "fieldType": "String",
+          "label": "Bangumi HTTP 代理",
+          "helperText": "仅用于访问 api.bgm.tv；例如 http://192.168.31.2:7890，留空则直连。",
+          "defaultValue": ""
+        }
+      ],
+      "dependencies": {
+        "appVersion": ">=1.11.0"
+      }
+    },
+    {
+      "name": "tmdb_proxy",
+      "title": "TMDB 代理",
+      "author": "Mopie",
+      "description": "免费部署 TMDB API 代理到 Vercel，国内直连无需梯子。支持自定义域名、连接测试、状态检测。",
+      "latestVersion": "0.1.0",
+      "logoUrl": "",
+      "githubUrl": "https://github.com/imaliang/tmdb-proxy",
+      "helpDocUrl": "https://github.com/yl948/mopie-plugins/tree/main/plugins/tmdb_proxy",
+      "payImageUrl": "",
+      "versions": [
+        {
+          "version": "0.1.0",
+          "changeLog": "初始发布",
+          "updatedAt": "2026-09-05T17:21:47Z",
+          "minAppVersion": "1.0.0",
+          "downloadUrl": "https://github.com/yl948/mopie-plugins/releases/download/tmdb_proxy-0.1.0/tmdb_proxy.zip"
+        }
+      ],
+      "configField": [
+        {
+          "fieldName": "api_key",
+          "fieldType": "String",
+          "label": "TMDB API Key",
+          "helperText": "在 themoviedb.org/settings/api 获取，v3 auth 格式",
+          "required": true
+        },
+        {
+          "fieldName": "proxy_mode",
+          "fieldType": "Enum",
+          "label": "代理方式",
+          "helperText": "选择如何访问 TMDB API",
+          "defaultValue": "vercel",
+          "enumValues": {
+            "vercel": "Vercel 反代（推荐，免费）",
+            "http": "HTTP 代理（已有代理服务器时使用）"
+          },
+          "required": true
+        },
+        {
+          "fieldName": "vercel_domain",
+          "fieldType": "String",
+          "label": "Vercel 自定义域名",
+          "helperText": "部署到 Vercel 后绑定的域名，如 tmdb.yourdomain.com"
+        },
+        {
+          "fieldName": "http_proxy",
+          "fieldType": "String",
+          "label": "HTTP 代理地址",
+          "helperText": "代理方式选 HTTP 时填写，如 http://192.168.1.1:7890"
+        }
+      ],
+      "dependencies": {
+        "appVersion": ">=1.0.0"
+      }
+    },
+    {
+      "name": "missav_metadata",
+      "title": "MissAV 元数据",
+      "author": "Mopie",
+      "description": "独立 NSFW 元数据提供器",
+      "latestVersion": "0.2.0",
+      "logoUrl": "",
+      "githubUrl": "https://github.com/yl948/mopie-plugins",
+      "helpDocUrl": "https://github.com/yl948/mopie-plugins/tree/main/plugins/missav_metadata",
+      "payImageUrl": "",
+      "versions": [
+        {
+          "version": "0.2.0",
+          "changeLog": "初始发布",
+          "updatedAt": "2026-09-05T17:21:47Z",
+          "minAppVersion": "1.11.0",
+          "downloadUrl": "https://github.com/yl948/mopie-plugins/releases/download/missav_metadata-0.2.0/missav_metadata.zip"
+        }
+      ],
+      "configField": [
+        {
+          "fieldName": "enabled",
+          "fieldType": "Bool",
+          "label": "启用插件",
+          "defaultValue": false
+        },
+        {
+          "fieldName": "base_url",
+          "fieldType": "String",
+          "label": "站点地址",
+          "helperText": "如 https://missav.ws",
+          "defaultValue": "https://missav.ws",
+          "required": true
+        },
+        {
+          "fieldName": "language_prefix",
+          "fieldType": "Enum",
+          "label": "页面语言",
+          "defaultValue": "en",
+          "enumValues": {
+            "en": "English",
+            "cn": "简体中文"
+          },
+          "required": true
+        },
+        {
+          "fieldName": "proxy",
+          "fieldType": "String",
+          "label": "代理地址",
+          "helperText": "HTTP代理；留空直连"
+        },
+        {
+          "fieldName": "flaresolverr_url",
+          "fieldType": "String",
+          "label": "FlareSolverr 地址",
+          "helperText": "如 http://ip:8191/v1",
+          "required": true
+        }
+      ],
+      "dependencies": {
+        "appVersion": ">=1.11.0"
       }
     }
   ]

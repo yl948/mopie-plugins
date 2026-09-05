@@ -1,0 +1,27 @@
+{
+  "searchPath": "/{language}/search/{query}",
+  "featuredPath": "/{language}/new",
+  "imageSelector": "img[data-src]",
+  "fullTitleSelector": "a.text-secondary",
+  "titleAttr": "alt",
+  "coverAttr": "data-src",
+  "imageHosts": ["fourhoi.com"],
+  "previewUrlTemplate": "https://fourhoi.com/{id}/preview.mp4",
+  "mediaHosts": ["fourhoi.com"],
+  "filters": [
+    { "value": "individual", "label": "单体女优" },
+    { "value": "jav", "label": "日本 AV" },
+    { "value": "asiaav", "label": "亚洲 AV" },
+    { "value": "uncensored-leak", "label": "无码泄露" },
+    { "value": "uncensored", "label": "无码" },
+    { "value": "english-subtitle", "label": "英文字幕" }
+  ],
+  "sorts": [
+    { "value": "released_at", "label": "发布日期" },
+    { "value": "published_at", "label": "最近更新" },
+    { "value": "today_views", "label": "今日热度" },
+    { "value": "weekly_views", "label": "本周热度" },
+    { "value": "monthly_views", "label": "本月热度" },
+    { "value": "views", "label": "总浏览量" }
+  ]
+}

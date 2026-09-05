@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "name": "explore-services",
+  "title": "探索服务聚合",
+  "author": "Mopie",
+  "description": "聚合 Bilibili、腾讯视频、CCTV、芒果TV、咪咕视频和 Bangumi 的公开影视探索目录。",
+  "version": "0.3.0-beta",
+  "logoUrl": "/api/plugins/explore-services/logo",
+  "entry": { "type": "process", "path": "runtime/explore-services" },
+  "configField": [
+    { "fieldName": "bilibili_enabled", "fieldType": "Bool", "label": "启用 Bilibili", "defaultValue": true },
+    { "fieldName": "tencent_enabled", "fieldType": "Bool", "label": "启用腾讯视频", "defaultValue": true },
+    { "fieldName": "cctv_enabled", "fieldType": "Bool", "label": "启用 CCTV", "defaultValue": true },
+    { "fieldName": "mango_enabled", "fieldType": "Bool", "label": "启用芒果TV", "defaultValue": true },
+    { "fieldName": "migu_enabled", "fieldType": "Bool", "label": "启用咪咕视频", "defaultValue": true },
+    { "fieldName": "bangumi_enabled", "fieldType": "Bool", "label": "启用 Bangumi", "defaultValue": true },
+    { "fieldName": "bangumi_proxy", "fieldType": "String", "label": "Bangumi HTTP 代理", "helperText": "仅用于访问 api.bgm.tv；例如 http://192.168.31.2:7890，留空则直连。", "defaultValue": "" }
+  ],
+  "tools": [
+    { "name": "explore.sources.list", "version": "v1", "description": "列出可浏览的探索来源", "permissions": ["network:api.bilibili.com", "network:pbaccess.video.qq.com", "network:api.cntv.cn", "network:pianku.api.mgtv.com", "network:jadeite.migu.cn", "network:api.bgm.tv"], "sideEffect": false },
+    { "name": "explore.list", "version": "v1", "description": "浏览探索内容", "permissions": ["network:api.bilibili.com", "network:pbaccess.video.qq.com", "network:api.cntv.cn", "network:pianku.api.mgtv.com", "network:jadeite.migu.cn", "network:api.bgm.tv"], "sideEffect": false },
+    { "name": "explore.health", "version": "v1", "description": "读取探索来源健康状态", "permissions": ["network:api.bilibili.com", "network:pbaccess.video.qq.com", "network:api.cntv.cn", "network:pianku.api.mgtv.com", "network:jadeite.migu.cn", "network:api.bgm.tv"], "sideEffect": false },
+    { "name": "explore.connection.test", "version": "v1", "description": "测试探索来源接口", "permissions": ["network:api.bilibili.com", "network:pbaccess.video.qq.com", "network:api.cntv.cn", "network:pianku.api.mgtv.com", "network:jadeite.migu.cn", "network:api.bgm.tv"], "sideEffect": false, "requiresConfirmation": false }
+  ],
+  "permissions": ["network:api.bilibili.com", "network:pbaccess.video.qq.com", "network:api.cntv.cn", "network:pianku.api.mgtv.com", "network:jadeite.migu.cn", "network:api.bgm.tv", "network:i0.hdslb.com", "network:i1.hdslb.com", "network:i2.hdslb.com", "network:*.qpic.cn", "network:*.hitv.com", "network:wapx.cmvideo.cn", "storage.self"],
+  "dependencies": { "appVersion": ">=1.11.0" }
+}

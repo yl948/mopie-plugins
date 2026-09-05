@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "name": "missav_metadata",
+  "title": "MissAV 元数据",
+  "author": "Mopie",
+  "description": "独立 NSFW 元数据提供器",
+  "version": "0.2.0",
+  "logoUrl": "/api/plugins/missav_metadata/logo",
+  "entry": { "type": "javascript", "path": "main.js" },
+  "configField": [
+    { "fieldName": "enabled", "fieldType": "Bool", "label": "启用插件", "defaultValue": false },
+    { "fieldName": "base_url", "fieldType": "String", "label": "站点地址", "helperText": "如 https://missav.ws", "defaultValue": "https://missav.ws", "required": true },
+    { "fieldName": "language_prefix", "fieldType": "Enum", "label": "页面语言", "defaultValue": "en", "enumValues": { "en": "English", "cn": "简体中文" }, "required": true },
+    { "fieldName": "proxy", "fieldType": "String", "label": "代理地址", "helperText": "HTTP代理；留空直连" },
+    { "fieldName": "flaresolverr_url", "fieldType": "String", "label": "FlareSolverr 地址", "helperText": "如 http://ip:8191/v1", "required": true }
+  ],
+  "commands": [
+    { "name": "health", "title": "测试连接", "description": "检查 FlareSolverr 是否能访问站点", "icon": "health_and_safety", "runInBackground": false, "args": [] },
+    { "name": "trending", "title": "查看热榜", "description": "获取最新热门内容列表", "icon": "local_fire_department", "runInBackground": true, "args": [] }
+  ],
+  "permissions": ["log", "config.self", "network.http", "storage.self"],
+  "events": [],
+  "dependencies": { "appVersion": ">=1.11.0" }
+}

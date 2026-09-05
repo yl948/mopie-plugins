@@ -1,0 +1,70 @@
+{
+  "schemaVersion": 1,
+  "name": "tmdb_proxy",
+  "title": "TMDB 代理",
+  "author": "Mopie",
+  "description": "免费部署 TMDB API 代理到 Vercel，国内直连无需梯子。支持自定义域名、连接测试、状态检测。",
+  "version": "0.1.0",
+  "logoUrl": "/api/plugins/tmdb_proxy/logo",
+  "githubUrl": "https://github.com/imaliang/tmdb-proxy",
+  "entry": {
+    "type": "javascript",
+    "path": "main.js"
+  },
+  "configField": [
+    {
+      "fieldName": "api_key",
+      "fieldType": "String",
+      "label": "TMDB API Key",
+      "helperText": "在 themoviedb.org/settings/api 获取，v3 auth 格式",
+      "required": true
+    },
+    {
+      "fieldName": "proxy_mode",
+      "fieldType": "Enum",
+      "label": "代理方式",
+      "helperText": "选择如何访问 TMDB API",
+      "defaultValue": "vercel",
+      "enumValues": {
+        "vercel": "Vercel 反代（推荐，免费）",
+        "http": "HTTP 代理（已有代理服务器时使用）"
+      },
+      "required": true
+    },
+    {
+      "fieldName": "vercel_domain",
+      "fieldType": "String",
+      "label": "Vercel 自定义域名",
+      "helperText": "部署到 Vercel 后绑定的域名，如 tmdb.yourdomain.com"
+    },
+    {
+      "fieldName": "http_proxy",
+      "fieldType": "String",
+      "label": "HTTP 代理地址",
+      "helperText": "代理方式选 HTTP 时填写，如 http://192.168.1.1:7890"
+    }
+  ],
+  "commands": [
+    {
+      "name": "deploy_vercel",
+      "title": "一键部署到 Vercel",
+      "description": "跳转到 Vercel 部署页面，一键创建 TMDB 代理服务",
+      "icon": "cloud_upload",
+      "runInBackground": false
+    },
+    {
+      "name": "test_connection",
+      "title": "测试连接",
+      "description": "测试 TMDB API 连接是否正常",
+      "icon": "network_check",
+      "runInBackground": false
+    },
+    {
+      "name": "sync_to_tmdb",
+      "title": "同步到系统设置",
+      "description": "将代理配置同步到 Mopie 系统 TMDB 设置",
+      "icon": "sync",
+      "runInBackground": false
+    }
+  ]
+}
