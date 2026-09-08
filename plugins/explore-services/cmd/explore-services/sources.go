@@ -165,8 +165,8 @@ func (r *runtime) fetchTencent(req listRequest) (listResult, error) {
 		pageParams["filter_params"] = filters
 	}
 	payload := map[string]interface{}{"page_params": pageParams}
-	if req.Page > 1 {
-		payload["page_context"] = map[string]string{"data_src_647bd63b21ef4b64b50fe65201d89c6e_page": strconv.Itoa(req.Page - 1)}
+	if req.Page > 1 && len(req.PageContext) > 0 {
+		payload["page_context"] = json.RawMessage(req.PageContext)
 	}
 	encoded, _ := json.Marshal(payload)
 	values := url.Values{"video_appid": {"1000005"}, "vplatform": {"2"}, "vversion_name": {"8.9.10"}, "new_mark_label_enabled": {"1"}}
@@ -175,10 +175,35 @@ func (r *runtime) fetchTencent(req listRequest) (listResult, error) {
 	if err := requestJSON(ctx, http.MethodPost, endpoint, strings.NewReader(string(encoded)), map[string]string{"Referer": "https://v.qq.com/", "Content-Type": "application/json"}, &body); err != nil {
 		return listResult{}, err
 	}
-	if len(body.Data.ModuleList) < 2 || len(body.Data.ModuleList[1].ModuleData) == 0 {
+	var module *struct {
+		ModuleParams struct {
+			HasNextPage string `json:"has_next_page"`
+			TotalVideo  string `json:"total_video"`
+		} `json:"module_params"`
+		Items struct {
+			Items []struct {
+				ItemType string      `json:"item_type"`
+				Params   tencentItem `json:"item_params"`
+			} `json:"item_datas"`
+		} `json:"item_data_lists"`
+	}
+	// 腾讯返回的第一个模块可能是导航/推荐位（无 item_type=2 的正片条目），
+	// 必须选第一个真正包含内容条目的模块，否则列表会被整体过滤为空。
+	selectModule:
+	for i := range body.Data.ModuleList {
+		for j := range body.Data.ModuleList[i].ModuleData {
+			md := &body.Data.ModuleList[i].ModuleData[j]
+			for _, it := range md.Items.Items {
+				if it.ItemType == "2" {
+					module = md
+					break selectModule
+				}
+			}
+		}
+	}
+	if module == nil {
 		return listResult{}, fmt.Errorf("UPSTREAM_SCHEMA_CHANGED: 腾讯视频列表结构为空")
 	}
-	module := body.Data.ModuleList[1].ModuleData[0]
 	items := make([]exploreItem, 0, len(module.Items.Items))
 	for _, raw := range module.Items.Items {
 		if raw.ItemType != "2" || raw.Params.CID == "" || raw.Params.Title == "" {
@@ -200,7 +225,11 @@ func (r *runtime) fetchTencent(req listRequest) (listResult, error) {
 		})
 	}
 	hasNext := body.Data.HasNextPage || module.ModuleParams.HasNextPage == "true"
-	return listResult{Items: items, Pagination: pagination{Mode: "page", Page: req.Page, PageSize: req.PageSize, HasNext: &hasNext}}, nil
+	var pc json.RawMessage
+	if body.Data.NextPageContext != nil && string(body.Data.NextPageContext) != "" {
+		pc = body.Data.NextPageContext
+	}
+	return listResult{Items: items, Pagination: pagination{Mode: "page", Page: req.Page, PageSize: req.PageSize, HasNext: &hasNext}, PageContext: pc}, nil
 }
 
 func tencentFilters(filters map[string]string) string {
@@ -251,7 +280,47 @@ func (r *runtime) fetchCCTV(req listRequest) (listResult, error) {
 		items = append(items, exploreItem{Source: "cctv", SourceItemID: item.ID, Title: strings.Trim(item.Title, "《》"), Year: item.Year, MediaType: mediaType, Category: req.Category, PosterURL: item.Image, SourceURL: "https://tv.cctv.com/", Status: "finished", Subtitle: item.Area})
 	}
 	hasNext := len(items) == req.PageSize
+	if useTmdb, _ := r.config["cctv_use_tmdb_cover"].(bool); useTmdb {
+		r.fetchCCTVTmdbCover(items)
+	}
 	return listResult{Items: items, Pagination: pagination{Mode: "page", Page: req.Page, PageSize: req.PageSize, Total: body.Data.Total, HasNext: &hasNext}}, nil
+}
+
+
+func (r *runtime) fetchCCTVTmdbCover(items []exploreItem) {
+	apiKey, _ := r.config["tmdb_api_key"].(string)
+	if apiKey == "" {
+		return
+	}
+	ctx, cancel := context.WithTimeout(context.Background(), 6*time.Second)
+	defer cancel()
+	for i := range items {
+		title := items[i].Title
+		if title == "" {
+			continue
+		}
+		mediaType := "multi"
+		if items[i].MediaType == "movie" {
+			mediaType = "movie"
+		} else if items[i].MediaType == "tv" {
+			mediaType = "tv"
+		}
+		endpoint := "https://api.themoviedb.org/3/search/" + mediaType + "?api_key=" + apiKey + "&query=" + url.QueryEscape(title) + "&language=zh-CN&include_adult=false"
+		var result struct {
+			Results []struct {
+				PosterPath *string `json:"poster_path"`
+			} `json:"results"`
+		}
+		if err := requestJSON(ctx, http.MethodGet, endpoint, nil, nil, &result); err != nil || len(result.Results) == 0 {
+			continue
+		}
+		for _, rp := range result.Results {
+			if rp.PosterPath != nil && *rp.PosterPath != "" {
+				items[i].PosterURL = "https://image.tmdb.org/t/p/w500" + *rp.PosterPath
+				break
+			}
+		}
+	}
 }
 
 func (r *runtime) fetchMango(req listRequest) (listResult, error) {

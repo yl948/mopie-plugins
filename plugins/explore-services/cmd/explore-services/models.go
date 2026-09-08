@@ -31,12 +31,13 @@ type sourceHealth struct {
 }
 
 type listRequest struct {
-	Source   string            `json:"source"`
-	Category string            `json:"category"`
-	Page     int               `json:"page"`
-	PageSize int               `json:"pageSize"`
-	Sort     string            `json:"sort"`
-	Filters  map[string]string `json:"filters"`
+	Source      string            `json:"source"`
+	Category    string            `json:"category"`
+	Page        int               `json:"page"`
+	PageSize    int               `json:"pageSize"`
+	Sort        string            `json:"sort"`
+	Filters     map[string]string `json:"filters"`
+	PageContext json.RawMessage   `json:"pageContext,omitempty"`
 }
 
 type sourceDescriptor struct {
@@ -90,7 +91,8 @@ type listResult struct {
 	Items      []exploreItem `json:"items"`
 	Pagination pagination    `json:"pagination"`
 	Cache      cacheInfo     `json:"cache"`
-	Warning    *warning      `json:"warning,omitempty"`
+	Warning     *warning        `json:"warning,omitempty"`
+	PageContext json.RawMessage `json:"pageContext,omitempty"`
 }
 
 type pagination struct {
@@ -139,7 +141,8 @@ type bilibiliItem struct {
 
 type tencentResponse struct {
 	Data struct {
-		HasNextPage bool `json:"has_next_page"`
+		HasNextPage     bool            `json:"has_next_page"`
+		NextPageContext json.RawMessage `json:"next_page_context"`
 		ModuleList  []struct {
 			ModuleData []struct {
 				ModuleParams struct {

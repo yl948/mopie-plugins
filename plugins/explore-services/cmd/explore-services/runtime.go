@@ -31,7 +31,7 @@ func (r *runtime) initialize(raw json.RawMessage) (interface{}, error) {
 	return map[string]interface{}{
 		"apiVersion": p.APIVersion,
 		"name":       p.PluginName,
-		"version":    "0.3.0-beta",
+		"version":    "0.3.1-beta",
 		"capabilities": []string{
 			"explore.sources.list", "explore.list", "explore.health", "explore.connection.test",
 		},
@@ -54,7 +54,7 @@ func (r *runtime) tool(name string, args map[string]interface{}) (interface{}, e
 	case "explore.connection.test":
 		return r.test(args)
 	default:
-		return nil, fmt.Errorf("unknown tool: %s", name)
+		return nil, fmt.Errorf("未知的工具: %s", name)
 	}
 }
 
@@ -121,7 +121,7 @@ func (r *runtime) list(req listRequest) (listResult, error) {
 		req.Page = 1
 	}
 	if req.PageSize < 1 || req.PageSize > 40 {
-		req.PageSize = 20
+		req.PageSize = 24
 	}
 	if req.Filters == nil {
 		req.Filters = map[string]string{}
@@ -169,7 +169,7 @@ func makeCacheInfo(state string, at, now time.Time) cacheInfo {
 
 func cacheKey(req listRequest) string {
 	data, _ := json.Marshal(req)
-	return string(data)
+	return string(data) + "" + string(req.PageContext)
 }
 
 func (r *runtime) putCache(key string, entry cacheEntry) {

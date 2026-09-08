@@ -37,7 +37,7 @@ func serve(r *runtime, in io.Reader, out io.Writer) {
 	for scanner.Scan() {
 		var request rpcRequest
 		if err := json.Unmarshal(scanner.Bytes(), &request); err != nil {
-			writeRPC(encoder, request.ID, nil, &rpcError{Code: -32700, Message: "invalid json"})
+			writeRPC(encoder, request.ID, nil, &rpcError{Code: -32700, Message: "无效的 JSON 请求"})
 			continue
 		}
 		if request.Method == "shutdown" {
@@ -66,7 +66,7 @@ func (r *runtime) handle(method string, raw json.RawMessage) (interface{}, error
 	case "tool.call":
 		return r.callTool(raw)
 	default:
-		return nil, fmt.Errorf("method not found: %s", method)
+		return nil, fmt.Errorf("未知的方法: %s", method)
 	}
 }
 
