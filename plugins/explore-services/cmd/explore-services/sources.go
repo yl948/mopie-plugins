@@ -153,9 +153,45 @@ func normalizeBilibili(item bilibiliItem, category string) exploreItem {
 	}
 }
 
+// fetchTencent 拉取腾讯视频列表。上游每批的内容条数不定（常少于 pageSize），
+// 这里用 page_context 自动续拉，凑满 pageSize 或上游没有更多为止，保证前端网格铺满。
 func (r *runtime) fetchTencent(req listRequest) (listResult, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 8*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
 	defer cancel()
+	items := make([]exploreItem, 0, req.PageSize)
+	seen := map[string]bool{}
+	pc := json.RawMessage(req.PageContext)
+	hasNext := false
+	for batch := 0; batch < 4 && len(items) < req.PageSize; batch++ {
+		batchItems, nextPC, more, err := r.tencentBatch(ctx, req, pc)
+		if err != nil {
+			if batch == 0 {
+				return listResult{}, err
+			}
+			break
+		}
+		for _, item := range batchItems {
+			if !seen[item.SourceItemID] {
+				seen[item.SourceItemID] = true
+				items = append(items, item)
+			}
+		}
+		hasNext = more
+		if len(nextPC) == 0 {
+			break
+		}
+		pc = nextPC
+	}
+	if len(items) > req.PageSize {
+		items = items[:req.PageSize]
+		hasNext = true
+	}
+	return listResult{Items: items, Pagination: pagination{Mode: "page", Page: req.Page, PageSize: req.PageSize, HasNext: &hasNext}, PageContext: pc}, nil
+}
+
+// tencentBatch 拉取单批数据。腾讯第一个模块可能是导航/推荐位（无 item_type=2 的正片），
+// 必须选第一个真正包含内容条目的模块，否则列表会被整体过滤为空。
+func (r *runtime) tencentBatch(ctx context.Context, req listRequest, pc json.RawMessage) ([]exploreItem, json.RawMessage, bool, error) {
 	channel := map[string]string{"tv": "100113", "movie": "100173", "variety": "100109", "documentary": "100105", "bangumi": "100119", "children": "100150"}[req.Category]
 	if channel == "" {
 		channel = "100113"
@@ -165,15 +201,15 @@ func (r *runtime) fetchTencent(req listRequest) (listResult, error) {
 		pageParams["filter_params"] = filters
 	}
 	payload := map[string]interface{}{"page_params": pageParams}
-	if req.Page > 1 && len(req.PageContext) > 0 {
-		payload["page_context"] = json.RawMessage(req.PageContext)
+	if len(pc) > 0 {
+		payload["page_context"] = pc
 	}
 	encoded, _ := json.Marshal(payload)
 	values := url.Values{"video_appid": {"1000005"}, "vplatform": {"2"}, "vversion_name": {"8.9.10"}, "new_mark_label_enabled": {"1"}}
 	endpoint := "https://pbaccess.video.qq.com/trpc.universal_backend_service.page_server_rpc.PageServer/GetPageData?" + values.Encode()
 	var body tencentResponse
 	if err := requestJSON(ctx, http.MethodPost, endpoint, strings.NewReader(string(encoded)), map[string]string{"Referer": "https://v.qq.com/", "Content-Type": "application/json"}, &body); err != nil {
-		return listResult{}, err
+		return nil, nil, false, err
 	}
 	var module *struct {
 		ModuleParams struct {
@@ -187,8 +223,6 @@ func (r *runtime) fetchTencent(req listRequest) (listResult, error) {
 			} `json:"item_datas"`
 		} `json:"item_data_lists"`
 	}
-	// 腾讯返回的第一个模块可能是导航/推荐位（无 item_type=2 的正片条目），
-	// 必须选第一个真正包含内容条目的模块，否则列表会被整体过滤为空。
 	selectModule:
 	for i := range body.Data.ModuleList {
 		for j := range body.Data.ModuleList[i].ModuleData {
@@ -202,7 +236,7 @@ func (r *runtime) fetchTencent(req listRequest) (listResult, error) {
 		}
 	}
 	if module == nil {
-		return listResult{}, fmt.Errorf("UPSTREAM_SCHEMA_CHANGED: 腾讯视频列表结构为空")
+		return nil, nil, false, fmt.Errorf("UPSTREAM_SCHEMA_CHANGED: 腾讯视频列表结构为空")
 	}
 	items := make([]exploreItem, 0, len(module.Items.Items))
 	for _, raw := range module.Items.Items {
@@ -225,11 +259,11 @@ func (r *runtime) fetchTencent(req listRequest) (listResult, error) {
 		})
 	}
 	hasNext := body.Data.HasNextPage || module.ModuleParams.HasNextPage == "true"
-	var pc json.RawMessage
+	var nextPC json.RawMessage
 	if body.Data.NextPageContext != nil && string(body.Data.NextPageContext) != "" {
-		pc = body.Data.NextPageContext
+		nextPC = body.Data.NextPageContext
 	}
-	return listResult{Items: items, Pagination: pagination{Mode: "page", Page: req.Page, PageSize: req.PageSize, HasNext: &hasNext}, PageContext: pc}, nil
+	return items, nextPC, hasNext, nil
 }
 
 func tencentFilters(filters map[string]string) string {

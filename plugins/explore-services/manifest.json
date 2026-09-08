@@ -4,7 +4,7 @@
   "title": "探索服务聚合",
   "author": "Mopie",
   "description": "聚合 Bilibili、腾讯视频、CCTV、芒果TV、咪咕视频和 Bangumi 的公开影视探索目录。",
-  "version": "0.3.2-beta",
+  "version": "0.3.3-beta",
   "logoUrl": "/api/plugins/explore-services/logo",
   "entry": {
     "type": "process",
