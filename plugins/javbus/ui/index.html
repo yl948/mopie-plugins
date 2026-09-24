@@ -1,0 +1,404 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>JavBus</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --bg: #101414;
+      --surface: #191f1f;
+      --surface-2: #24302d;
+      --text: #f3f6f4;
+      --muted: #b7c4bf;
+      --border: #3a4945;
+      --accent: #ef7667;
+      --mint: #8ed4b8;
+      --danger: #ff9b91;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--text); font-size: 13px; line-height: 1.5; }
+    button, input { font: inherit; }
+    button { min-height: 36px; border: 1px solid var(--border); border-radius: 8px; background: var(--surface-2); color: var(--text); cursor: pointer; }
+    button:disabled { opacity: .55; cursor: wait; }
+    .page { width: min(100%, 1180px); margin: 0 auto; padding: 22px clamp(16px, 3vw, 32px) 48px; }
+    .top { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; }
+    h1 { margin: 0; font-size: 22px; font-weight: 700; letter-spacing: 0; }
+    .subtitle { margin-top: 4px; color: var(--muted); font-size: 13px; }
+    .test { min-width: 72px; padding: 0 16px; }
+    .modes { display: flex; gap: 8px; margin: 22px 0 16px; }
+    .modes button { min-width: 72px; padding: 0 14px; font-size: 13px; }
+    .modes button.active { border-color: var(--accent); background: var(--accent); color: #201715; font-weight: 680; }
+    .search { display: none; gap: 10px; margin-bottom: 16px; }
+    .search.show { display: flex; }
+    .search input { min-width: 0; height: 40px; flex: 1; padding: 0 12px; border: 1px solid var(--border); border-radius: 8px; background: var(--surface); color: var(--text); font-size: 14px; }
+    .search button { min-width: 96px; padding: 0 18px; border-color: var(--accent); background: var(--accent); color: #201715; font-weight: 680; }
+    .cats { display: flex; gap: 8px; align-items: center; margin: 0 0 12px; overflow-x: auto; }
+    .cats button { flex: 0 0 auto; min-height: 32px; padding: 0 12px; font-size: 13px; }
+    .cats button.active { border-color: var(--accent); color: var(--accent); }
+    .genre-panel { display: none; max-height: 280px; margin: 0 0 14px; padding: 8px 12px 12px; overflow: auto; border: 1px solid var(--border); border-radius: 8px; background: var(--surface); }
+    .genre-panel.show { display: block; }
+    .genre-name { margin: 10px 0 6px; font-size: 13px; font-weight: 700; }
+    .genre-list { display: flex; flex-wrap: wrap; gap: 6px; }
+    .genre-list button { min-height: 30px; padding: 0 10px; font-size: 13px; }
+    .genre-list button.active { border-color: var(--accent); color: var(--accent); }
+    .status { min-height: 24px; margin-bottom: 12px; color: var(--muted); font-size: 13px; }
+    .status.error { color: var(--danger); }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 16px; }
+    .card { display: flex; flex-direction: column; min-width: 0; padding: 0; overflow: hidden; border: 1px solid var(--border); border-radius: 10px; background: var(--surface); text-align: left; }
+    .card:hover:not(:disabled) { border-color: var(--accent); }
+    .cover { display: grid; width: 100%; aspect-ratio: 3 / 4; place-items: center; background: #141a1a; color: var(--muted); font-size: 14px; }
+    .cover img { width: 100%; height: 100%; object-fit: cover; }
+    .card-body { display: grid; gap: 6px; padding: 12px 12px 14px; }
+    .code { color: var(--mint); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 13px; font-weight: 700; }
+    .card-title { min-height: 2.8em; color: var(--text); font-size: 13px; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .card-meta { color: var(--muted); font-size: 12px; }
+    .more { display: block; width: min(100%, 220px); margin: 18px auto 0; }
+    .empty { padding: 36px 16px; border: 1px dashed var(--border); border-radius: 10px; color: var(--muted); text-align: center; font-size: 13px; }
+    .detail { margin-top: 28px; padding-top: 22px; border-top: 1px solid var(--border); }
+    .detail-layout { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 20px; align-items: start; }
+    .detail-cover { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; border-radius: 10px; background: #141a1a; }
+    .detail-code { margin-bottom: 4px; color: var(--mint); font: 700 13px ui-monospace, SFMono-Regular, Menlo, monospace; }
+    .detail h2 { margin: 0 0 10px; font-size: 16px; line-height: 1.4; }
+    .external { color: var(--muted); font-size: 13px; }
+    .metadata { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 8px 18px; margin: 0 0 18px; }
+    .metadata div { color: var(--muted); font-size: 13px; line-height: 1.5; overflow-wrap: anywhere; }
+    .metadata strong { color: var(--text); font-weight: 620; }
+    .magnet-list { display: grid; gap: 10px; }
+    .magnet { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 12px; align-items: center; padding: 12px 14px; border: 1px solid var(--border); border-radius: 8px; background: var(--surface); }
+    .magnet-title { font-size: 13px; line-height: 1.45; overflow-wrap: anywhere; }
+    .magnet-meta { margin-top: 2px; color: var(--muted); font-size: 12px; }
+    .magnet-link { grid-column: 1 / -1; width: 100%; height: 34px; padding: 0 8px; border: 1px solid var(--border); border-radius: 6px; background: var(--bg); color: var(--text); font: 12px ui-monospace, SFMono-Regular, Menlo, monospace; }
+    .notice { margin: 12px 0 0; color: var(--muted); font-size: 12px; }
+    @media (max-width: 720px) {
+      h1 { font-size: 20px; }
+      .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+      .card-title { font-size: 13px; }
+      .detail-layout { grid-template-columns: 1fr; }
+      .detail-cover { max-width: 240px; }
+      .magnet { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header class="top">
+      <div>
+        <h1>JavBus</h1>
+        <div class="subtitle">推荐最新上架，也可以按番号或关键词搜索</div>
+      </div>
+      <button id="test" class="test" type="button">测试</button>
+    </header>
+    <div class="modes" role="tablist">
+      <button id="mode-latest" class="active" type="button">推荐</button>
+      <button id="mode-search" type="button">搜索</button>
+    </div>
+    <div class="cats" id="cats">
+      <button type="button" data-cat="" class="active">全部</button>
+      <button type="button" data-cat="uncensored">无码</button>
+      <button type="button" data-cat="genre/hd">高清</button>
+      <button type="button" data-cat="genre/sub">字幕</button>
+      <button type="button" id="more-cats">分类</button>
+    </div>
+    <div class="genre-panel" id="genre-panel"></div>
+    <form class="search" id="search-form">
+      <input id="query" type="search" autocomplete="off" placeholder="番号或关键词，例如 SSIS-960、巨乳" aria-label="番号或关键词">
+      <button type="submit" id="search-button">搜索</button>
+    </form>
+    <div class="status" id="status" role="status"></div>
+    <section class="grid" id="results" aria-label="影片"></section>
+    <button id="more" class="more" type="button" hidden>更多</button>
+    <section class="detail" id="detail" hidden></section>
+  </main>
+  <script>
+    const $ = (id) => document.getElementById(id)
+    const status = $('status'), results = $('results'), detail = $('detail'), more = $('more')
+    let busy = false
+    let mode = 'latest'
+    let page = 1
+    let category = ''
+    let genreLoaded = false
+
+    function setStatus(message, kind) {
+      status.className = 'status' + (kind ? ' ' + kind : '')
+      status.textContent = message || ''
+    }
+    function authHeaders() {
+      return { 'Content-Type': 'application/json', Authorization: 'Bearer ' + (localStorage.getItem('mopie_token') || '') }
+    }
+    async function runCommand(commandName, args) {
+      const response = await fetch('/api/plugins/run-command', {
+        method: 'POST', headers: authHeaders(),
+        body: JSON.stringify({ pluginName: 'javbus', commandName, args: args || {} })
+      })
+      const envelope = await response.json()
+      if (!response.ok || envelope.code !== 0) throw new Error(envelope.message || '插件请求失败')
+      const command = envelope.data || {}
+      if (!command.success) throw new Error(command.message || '请求失败')
+      return command
+    }
+    function coverURL(raw) {
+      if (!raw) return ''
+      return '/api/plugins/javbus/cover?url=' + encodeURIComponent(raw)
+    }
+    function renderCards(items, append) {
+      if (!append) results.innerHTML = ''
+      items.forEach((item) => {
+        const card = document.createElement('button')
+        card.type = 'button'
+        card.className = 'card'
+        const cover = document.createElement('div')
+        cover.className = 'cover'
+        const src = coverURL(item.image)
+        if (src) {
+          const img = document.createElement('img')
+          img.alt = ''
+          img.src = src
+          img.addEventListener('error', () => {
+            const fallback = coverURL(item.thumb)
+            if (fallback && img.src.indexOf(encodeURIComponent(item.thumb || ' ')) < 0) { img.src = fallback; return }
+            img.remove(); cover.textContent = '无封面'
+          })
+          cover.append(img)
+        } else cover.textContent = '无封面'
+        const body = document.createElement('div')
+        body.className = 'card-body'
+        const code = document.createElement('div')
+        code.className = 'code'
+        code.textContent = item.code || ''
+        const title = document.createElement('div')
+        title.className = 'card-title'
+        title.textContent = item.title || item.code || ''
+        const meta = document.createElement('div')
+        meta.className = 'card-meta'
+        meta.textContent = [item.date].concat(item.tags || []).filter(Boolean).join(' · ')
+        body.append(code, title, meta)
+        card.append(cover, body)
+        card.addEventListener('click', () => loadDetail(item))
+        results.append(card)
+      })
+      if (!items.length && !append) {
+        const empty = document.createElement('div')
+        empty.className = 'empty'
+        empty.textContent = '没有可显示的结果'
+        results.append(empty)
+      }
+    }
+    async function loadLatest(nextPage, append) {
+      if (busy) return
+      busy = true
+      more.disabled = true
+      if (!append) { detail.hidden = true; detail.innerHTML = '' }
+      setStatus(append ? '正在加载更多…' : '正在加载推荐…')
+      try {
+        const response = await runCommand('latest', { page: nextPage, category })
+        const items = response.data?.results || []
+        page = nextPage
+        renderCards(items, append)
+        more.hidden = items.length < 20
+        setStatus(response.message || ('推荐 ' + items.length + ' 部'))
+      } catch (error) {
+        if (!append) renderCards([], false)
+        more.hidden = true
+        setStatus(error.message || '推荐加载失败', 'error')
+      } finally { busy = false; more.disabled = false }
+    }
+    async function search(query) {
+      if (busy) return
+      busy = true
+      $('search-button').disabled = true
+      more.hidden = true
+      detail.hidden = true
+      detail.innerHTML = ''
+      setStatus('正在搜索…')
+      try {
+        const response = await runCommand('search', { query })
+        const items = response.data?.results || []
+        renderCards(items, false)
+        setStatus(items.length ? ('找到 ' + items.length + ' 部') : (response.message || '没有结果'))
+      } catch (error) {
+        renderCards([], false)
+        setStatus(error.message || '搜索失败', 'error')
+      } finally { busy = false; $('search-button').disabled = false }
+    }
+    function copyText(value) {
+      const area = document.createElement('textarea')
+      area.value = value
+      area.setAttribute('readonly', '')
+      area.style.position = 'fixed'
+      area.style.top = '0'
+      area.style.left = '0'
+      area.style.width = '1px'
+      area.style.height = '1px'
+      area.style.opacity = '0'
+      document.body.append(area)
+      area.focus()
+      area.select()
+      area.setSelectionRange(0, area.value.length)
+      let ok = false
+      try { ok = document.execCommand('copy') } catch (_) {}
+      area.remove()
+      return ok
+    }
+    function renderDetail(data, item) {
+      detail.hidden = false
+      detail.innerHTML = ''
+      const layout = document.createElement('div')
+      layout.className = 'detail-layout'
+      const src = coverURL(data.image || item.image)
+      if (src) {
+        const img = document.createElement('img')
+        img.className = 'detail-cover'
+        img.alt = ''
+        img.src = src
+        layout.append(img)
+      }
+      const main = document.createElement('div')
+      const code = document.createElement('div')
+      code.className = 'detail-code'
+      code.textContent = data.code || item.code || ''
+      const title = document.createElement('h2')
+      title.textContent = data.title || item.title || ''
+      const external = document.createElement('a')
+      external.className = 'external'
+      external.href = data.url || item.url
+      external.target = '_blank'
+      external.rel = 'noopener noreferrer'
+      external.textContent = '打开原站'
+      main.append(code, title, external)
+      if ((data.metadata || []).length) {
+        const metadata = document.createElement('div')
+        metadata.className = 'metadata'
+        data.metadata.forEach((entry) => {
+          const row = document.createElement('div')
+          const label = document.createElement('strong')
+          label.textContent = entry.label + '：'
+          row.append(label, document.createTextNode(entry.value || ''))
+          metadata.append(row)
+        })
+        main.append(metadata)
+      }
+      const list = document.createElement('div')
+      list.className = 'magnet-list'
+      ;(data.magnets || []).forEach((magnet, index) => {
+        const row = document.createElement('article')
+        row.className = 'magnet'
+        const text = document.createElement('div')
+        const label = document.createElement('div')
+        label.className = 'magnet-title'
+        label.textContent = magnet.title || ('磁力链接 ' + (index + 1))
+        const meta = document.createElement('div')
+        meta.className = 'magnet-meta'
+        meta.textContent = [magnet.size, magnet.date].filter(Boolean).join(' · ')
+        text.append(label, meta)
+        const copy = document.createElement('button')
+        copy.type = 'button'
+        copy.textContent = '复制磁力'
+        copy.addEventListener('click', () => {
+          if (!magnet.uri || !copyText(magnet.uri)) { setStatus('复制失败，请点下面的链接手动复制。', 'error'); return }
+          copy.textContent = '已复制'
+          setTimeout(() => { copy.textContent = '复制磁力' }, 1600)
+        })
+        const link = document.createElement('input')
+        link.className = 'magnet-link'
+        link.readOnly = true
+        link.value = magnet.uri || ''
+        link.addEventListener('focus', () => link.select())
+        row.append(text, copy, link)
+        list.append(row)
+      })
+      if (!(data.magnets || []).length) {
+        const empty = document.createElement('div')
+        empty.className = 'empty'
+        empty.textContent = '没有解析到磁力链接'
+        list.append(empty)
+      }
+      main.append(list)
+      const note = document.createElement('p')
+      note.className = 'notice'
+      note.textContent = '只展示和复制链接，不会提交到下载器。'
+      main.append(note)
+      layout.append(main)
+      detail.append(layout)
+      detail.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+    }
+    async function loadDetail(item) {
+      setStatus('正在读取 ' + (item.code || '') + ' …')
+      try {
+        const response = await runCommand('detail', { url: item.url })
+        renderDetail(response.data || {}, item)
+        setStatus(response.message || '详情已加载')
+      } catch (error) { setStatus(error.message || '读取详情失败', 'error') }
+    }
+    function markCategory(cat) {
+      document.querySelectorAll('#cats button[data-cat], #genre-panel button[data-cat]').forEach((button) => {
+        button.classList.toggle('active', button.dataset.cat === cat)
+      })
+    }
+    async function toggleGenres() {
+      const panel = $('genre-panel')
+      panel.classList.toggle('show')
+      if (!panel.classList.contains('show') || genreLoaded) return
+      setStatus('正在加载分类…')
+      try {
+        const response = await runCommand('genres', {})
+        const groups = response.data?.groups || []
+        panel.innerHTML = ''
+        groups.forEach((group) => {
+          const name = document.createElement('div')
+          name.className = 'genre-name'
+          name.textContent = group.name
+          const list = document.createElement('div')
+          list.className = 'genre-list'
+          ;(group.items || []).forEach((item) => {
+            const button = document.createElement('button')
+            button.type = 'button'
+            button.dataset.cat = 'genre/' + item.id
+            button.textContent = item.label
+            button.addEventListener('click', () => chooseCategory(button.dataset.cat))
+            list.append(button)
+          })
+          panel.append(name, list)
+        })
+        genreLoaded = true
+        markCategory(category)
+        setStatus('')
+      } catch (error) {
+        panel.classList.remove('show')
+        setStatus(error.message || '分类加载失败', 'error')
+      }
+    }
+    function chooseCategory(cat) {
+      category = cat
+      markCategory(cat)
+      loadLatest(1, false)
+    }
+    function setMode(next) {
+      mode = next
+      $('mode-latest').classList.toggle('active', next === 'latest')
+      $('mode-search').classList.toggle('active', next === 'search')
+      $('search-form').classList.toggle('show', next === 'search')
+      $('cats').style.display = next === 'latest' ? 'flex' : 'none'
+      if (next !== 'latest') $('genre-panel').classList.remove('show')
+      if (next === 'latest') loadLatest(1, false)
+      else { more.hidden = true; results.innerHTML = ''; detail.hidden = true; setStatus('输入番号或关键词开始搜索') }
+    }
+    document.querySelectorAll('#cats button[data-cat]').forEach((button) => {
+      button.addEventListener('click', () => { if (button.dataset.cat !== category) chooseCategory(button.dataset.cat) })
+    })
+    $('more-cats').addEventListener('click', toggleGenres)
+    $('mode-latest').addEventListener('click', () => { if (mode !== 'latest') setMode('latest') })
+    $('mode-search').addEventListener('click', () => { if (mode !== 'search') setMode('search') })
+    $('search-form').addEventListener('submit', (event) => { event.preventDefault(); search($('query').value.trim()) })
+    more.addEventListener('click', () => loadLatest(page + 1, true))
+    $('test').addEventListener('click', async () => {
+      setStatus('正在测试连接…')
+      try { const response = await runCommand('test_connection', {}); setStatus(response.message || '连接正常') }
+      catch (error) { setStatus(error.message || '连接测试失败', 'error') }
+    })
+    loadLatest(1, false)
+  </script>
+</body>
+</html>

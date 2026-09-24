@@ -1,0 +1,107 @@
+{
+  "schemaVersion": 1,
+  "name": "javbus",
+  "title": "JavBus 搜索",
+  "author": "Mopie",
+  "description": "按番号搜索 JavBus 影片资料并查看、复制磁力链接，不会自动提交下载。",
+  "version": "0.1.0",
+  "logoUrl": "/api/plugins/javbus/logo",
+  "entry": {
+    "type": "javascript",
+    "path": "main.js"
+  },
+  "configField": [
+    {
+      "fieldName": "proxy",
+      "fieldType": "String",
+      "label": "HTTP 代理",
+      "helperText": "仅用于 JavBus 请求；留空则直连。",
+      "defaultValue": ""
+    },
+    {
+      "fieldName": "cookie",
+      "fieldType": "String",
+      "label": "JavBus Cookie",
+      "helperText": "浏览器确认年龄后的 Cookie。留空则只访问公开列表。保存在插件配置中。",
+      "defaultValue": ""
+    }
+  ],
+  "pages": [
+    {
+      "id": "search",
+      "title": "JavBus 搜索",
+      "path": "ui/index.html",
+      "icon": "search",
+      "showInMenu": true
+    }
+  ],
+  "commands": [
+    {
+      "name": "latest",
+      "title": "最新推荐",
+      "description": "读取 JavBus 首页最新上架",
+      "icon": "movie",
+      "runInBackground": false,
+      "args": [
+        {
+          "name": "page",
+          "type": "Number",
+          "label": "页码",
+          "required": false
+        },
+        {
+          "name": "category",
+          "type": "String",
+          "label": "分类",
+          "required": false
+        }
+      ]
+    },
+    {
+      "name": "genres",
+      "title": "分类",
+      "description": "读取 JavBus 有码分类",
+      "icon": "category",
+      "runInBackground": false,
+      "args": []
+    },
+    {
+      "name": "test_connection",
+      "title": "测试连接",
+      "description": "通过插件代理检查 JavBus 是否可访问",
+      "icon": "network_check",
+      "runInBackground": false,
+      "args": []
+    },
+    {
+      "name": "search",
+      "title": "搜索番号",
+      "description": "输入番号或关键词搜索 JavBus",
+      "icon": "search",
+      "runInBackground": false,
+      "args": [
+        {
+          "name": "query",
+          "type": "String",
+          "label": "番号或关键词",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "detail",
+      "title": "获取影片详情",
+      "description": "读取影片资料和页面提供的磁力链接",
+      "icon": "info",
+      "runInBackground": false,
+      "args": []
+    }
+  ],
+  "permissions": [
+    "network.http",
+    "config.self"
+  ],
+  "dependencies": {
+    "appVersion": ">=1.11.0"
+  }
+}

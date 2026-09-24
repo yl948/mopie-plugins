@@ -1,0 +1,132 @@
+{
+  "schemaVersion": 1,
+  "name": "bili-up",
+  "title": "B站荐片",
+  "author": "Mopie",
+  "description": "关注影评 UP，从标题识别片名并展示 TMDB 海报。不自动订阅。",
+  "version": "0.1.4",
+  "logoUrl": "/api/plugins/bili-up/logo",
+  "versions": [
+    {
+      "version": "0.1.4",
+      "changeLog": "海报列表分页；下一页继续拉更早的投稿。",
+      "updatedAt": "2026-09-20T00:50:00+08:00"
+    },
+    {
+      "version": "0.1.3",
+      "changeLog": "标题没有《》也能抽片名；对比/翻拍用的书名号会降权，避免配错。",
+      "updatedAt": "2026-09-19T01:00:00+08:00"
+    },
+    {
+      "version": "0.1.2",
+      "changeLog": "可设置每个 UP 拉取投稿数量（1–100，默认 20）。",
+      "updatedAt": "2026-09-19T00:45:00+08:00"
+    },
+    {
+      "version": "0.1.1",
+      "changeLog": "海报和匹配改为 TMDB，不再使用豆瓣。",
+      "updatedAt": "2026-09-19T00:30:00+08:00"
+    },
+    {
+      "version": "0.1.0",
+      "changeLog": "关注影评 UP，从标题抽片名并展示海报。不自动订阅。",
+      "updatedAt": "2026-09-17T23:30:00+08:00"
+    }
+  ],
+  "entry": {
+    "type": "process",
+    "path": "runtime/bili-up"
+  },
+  "pages": [
+    {
+      "id": "board",
+      "title": "B站荐片",
+      "path": "pages/board.html",
+      "icon": "movie",
+      "showInMenu": true
+    }
+  ],
+  "configField": [
+    {
+      "fieldName": "fetch_count",
+      "fieldType": "Number",
+      "label": "每个 UP 拉取数量",
+      "helperText": "刷新时每个关注 UP 拉最近多少条投稿，1–100，默认 20。",
+      "defaultValue": 20
+    },
+    {
+      "fieldName": "proxy",
+      "fieldType": "String",
+      "label": "HTTP 代理",
+      "helperText": "拉 B 站投稿用。留空则使用系统 TMDB 代理。",
+      "defaultValue": ""
+    }
+  ],
+  "tools": [
+    {
+      "name": "biliup.follows.list",
+      "version": "v1",
+      "description": "已关注的 UP",
+      "permissions": [
+        "network:api.bilibili.com"
+      ],
+      "sideEffect": false
+    },
+    {
+      "name": "biliup.follows.add",
+      "version": "v1",
+      "description": "关注 UP",
+      "permissions": [
+        "network:api.bilibili.com"
+      ],
+      "sideEffect": true
+    },
+    {
+      "name": "biliup.follows.remove",
+      "version": "v1",
+      "description": "取消关注",
+      "permissions": [
+        "storage.self"
+      ],
+      "sideEffect": true
+    },
+    {
+      "name": "biliup.refresh",
+      "version": "v1",
+      "description": "立刻拉取投稿",
+      "permissions": [
+        "network:api.bilibili.com",
+        "network:api.themoviedb.org"
+      ],
+      "sideEffect": true
+    },
+    {
+      "name": "biliup.more",
+      "version": "v1",
+      "description": "继续拉取更早的投稿",
+      "permissions": [
+        "network:api.bilibili.com",
+        "network:api.themoviedb.org"
+      ],
+      "sideEffect": true
+    },
+    {
+      "name": "biliup.movies.list",
+      "version": "v1",
+      "description": "已匹配的海报列表",
+      "permissions": [
+        "storage.self"
+      ],
+      "sideEffect": false
+    }
+  ],
+  "permissions": [
+    "network:api.bilibili.com",
+    "network:app.bilibili.com",
+    "network:space.bilibili.com",
+    "network:api.themoviedb.org",
+    "network:image.tmdb.org",
+    "network:www.themoviedb.org",
+    "storage.self"
+  ]
+}

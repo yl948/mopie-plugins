@@ -1,6 +1,6 @@
 # Mopie 插件仓库
 
-这是 Mopie 的官方插件仓库，提供各种扩展功能。
+这是 Mopie 的官方插件仓库，内容和本机正在使用的插件一致。
 
 ## 如何使用
 
@@ -8,68 +8,15 @@
 2. 切换到 **插件市场** 标签页
 3. 选择要安装的插件，点击 **安装** 按钮
 
-## 如何开发插件
-
-### 插件目录结构
-
-```
-your_plugin/
-├── manifest.json     # 插件元数据
-├── README.md         # 插件说明文档
-└── ...               # 其他文件
-```
-
-### manifest.json 格式
-
-```json
-{
-  "name": "your_plugin",
-  "title": "你的插件名称",
-  "author": "作者名",
-  "description": "插件描述",
-  "version": "1.0",
-  "logoUrl": "",
-  "githubUrl": "https://github.com/your/repo",
-  "helpDocUrl": "https://github.com/your/repo/wiki",
-  "payImageUrl": "",
-  "configField": [
-    {
-      "fieldName": "api_key",
-      "fieldType": "String",
-      "label": "API Key",
-      "helperText": "请输入你的API Key",
-      "defaultValue": "",
-      "required": true
-    }
-  ],
-  "dependencies": {
-    "appVersion": ">=1.0.0"
-  }
-}
-```
-
-### 提交插件
-
-1. Fork 本仓库
-2. 在 `plugins/` 目录下创建你的插件文件夹
-3. 编写 `manifest.json` 和相关文件
-4. 更新 `registry.json` 添加你的插件信息
-5. 创建 Pull Request
-
-### 配置字段类型
-
-- `String`: 文本输入
-- `Bool`: 开关选择
-- `Enum`: 下拉选择（需要提供 `enumValues`）
-- `Number`: 数字输入
+安装包在 `dist/`。站点配置不在这个仓库，见 [mopie-sites](https://github.com/yl948/mopie-sites)。
 
 ## 插件列表
 
 | 插件名称 | 描述 | 版本 | 作者 |
 |---------|------|------|------|
-| 过滤器及排序规则配置下载 | 应疯佬需求，提供过滤器及排序规则配置下载，点击下方帮助按钮查看说明。 | 1.0 | NaNaKo_ |
-| 探索服务聚合 | 聚合 Bilibili、腾讯视频、CCTV、芒果TV、咪咕视频和 Bangumi 的公开影视探索目录。 | 0.3.0-beta | Mopie |
-| TMDB 代理 | 免费部署 TMDB API 代理到 Vercel，国内直连无需梯子。支持自定义域名、连接测试、状态检测。 | 0.1.0 | Mopie |
+| B站荐片 | 关注影评 UP，从标题识别片名并展示 TMDB 海报。不自动订阅。 | 0.1.4 | Mopie |
+| 探索服务聚合 | 聚合 Bilibili、腾讯视频、CCTV、芒果TV、咪咕视频和 Bangumi 的公开影视探索目录。 | 0.3.4-beta | Mopie |
+| JavBus 搜索 | 按番号搜索 JavBus 影片资料并查看、复制磁力链接，不会自动提交下载。 | 0.1.0 | Mopie |
 | MissAV 元数据 | 独立 NSFW 元数据提供器 | 0.2.0 | Mopie |
 
 ## 联系我们

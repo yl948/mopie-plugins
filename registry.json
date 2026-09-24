@@ -1,25 +1,40 @@
 {
   "plugins": [
     {
-      "name": "filter_rules",
-      "title": "过滤器及排序规则配置下载",
-      "author": "NaNaKo_",
-      "description": "应疯佬需求，提供过滤器及排序规则配置下载，点击下方帮助按钮查看说明。",
-      "latestVersion": "1.0",
+      "name": "bili-up",
+      "title": "B站荐片",
+      "author": "Mopie",
+      "description": "关注影评 UP，从标题识别片名并展示 TMDB 海报。不自动订阅。",
+      "latestVersion": "0.1.4",
       "logoUrl": "",
       "githubUrl": "https://github.com/yl948/mopie-plugins",
-      "helpDocUrl": "https://github.com/yl948/mopie-plugins/tree/main/plugins/filter_rules",
+      "helpDocUrl": "https://github.com/yl948/mopie-plugins/tree/main/plugins/bili-up",
       "payImageUrl": "",
       "versions": [
         {
-          "version": "1.0",
-          "changeLog": "初始版本，提供基础过滤器和排序规则配置",
-          "updatedAt": "2026-07-23T00:00:00Z",
+          "version": "0.1.4",
+          "changeLog": "海报列表分页；下一页继续拉更早的投稿。",
+          "updatedAt": "2026-09-24T08:40:22Z",
           "minAppVersion": "1.0.0",
-          "downloadUrl": "https://github.com/yl948/mopie-plugins/releases/download/filter_rules-v1.0/filter_rules.zip"
+          "downloadUrl": "https://raw.githubusercontent.com/yl948/mopie-plugins/main/dist/bili-up.zip"
         }
       ],
-      "configField": [],
+      "configField": [
+        {
+          "fieldName": "fetch_count",
+          "fieldType": "Number",
+          "label": "每个 UP 拉取数量",
+          "helperText": "刷新时每个关注 UP 拉最近多少条投稿，1–100，默认 20。",
+          "defaultValue": 20
+        },
+        {
+          "fieldName": "proxy",
+          "fieldType": "String",
+          "label": "HTTP 代理",
+          "helperText": "拉 B 站投稿用。留空则使用系统 TMDB 代理。",
+          "defaultValue": ""
+        }
+      ],
       "dependencies": {
         "appVersion": ">=1.0.0"
       }
@@ -29,18 +44,18 @@
       "title": "探索服务聚合",
       "author": "Mopie",
       "description": "聚合 Bilibili、腾讯视频、CCTV、芒果TV、咪咕视频和 Bangumi 的公开影视探索目录。",
-      "latestVersion": "0.3.0-beta",
+      "latestVersion": "0.3.4-beta",
       "logoUrl": "",
       "githubUrl": "https://github.com/yl948/mopie-plugins",
       "helpDocUrl": "https://github.com/yl948/mopie-plugins/tree/main/plugins/explore-services",
       "payImageUrl": "",
       "versions": [
         {
-          "version": "0.3.0-beta",
-          "changeLog": "初始发布",
-          "updatedAt": "2026-09-05T17:21:47Z",
-          "minAppVersion": "1.11.0",
-          "downloadUrl": "https://github.com/yl948/mopie-plugins/releases/download/explore-services-0.3.0-beta/explore-services.zip"
+          "version": "0.3.4-beta",
+          "changeLog": "同步本地正在使用的版本。",
+          "updatedAt": "2026-09-24T08:40:22Z",
+          "minAppVersion": "1.0.0",
+          "downloadUrl": "https://raw.githubusercontent.com/yl948/mopie-plugins/main/dist/explore-services.zip"
         }
       ],
       "configField": [
@@ -61,6 +76,13 @@
           "fieldType": "Bool",
           "label": "启用 CCTV",
           "defaultValue": true
+        },
+        {
+          "fieldName": "cctv_use_tmdb_cover",
+          "fieldType": "Bool",
+          "label": "CCTV 使用 TMDB 封面",
+          "helperText": "当启用时，CCTV 节目将通过标题搜索 TMDB 获取更清晰的封面图（需填写 TMDB API Key）。",
+          "defaultValue": false
         },
         {
           "fieldName": "mango_enabled",
@@ -84,64 +106,47 @@
           "fieldName": "bangumi_proxy",
           "fieldType": "String",
           "label": "Bangumi HTTP 代理",
-          "helperText": "仅用于访问 api.bgm.tv；例如 http://192.168.31.2:7890，留空则直连。",
+          "helperText": "仅用于访问 api.bgm.tv；例如 http://127.0.0.1:7890，留空则直连。",
           "defaultValue": ""
         }
       ],
       "dependencies": {
-        "appVersion": ">=1.11.0"
+        "appVersion": ">=1.0.0"
       }
     },
     {
-      "name": "tmdb_proxy",
-      "title": "TMDB 代理",
+      "name": "javbus",
+      "title": "JavBus 搜索",
       "author": "Mopie",
-      "description": "免费部署 TMDB API 代理到 Vercel，国内直连无需梯子。支持自定义域名、连接测试、状态检测。",
+      "description": "按番号搜索 JavBus 影片资料并查看、复制磁力链接，不会自动提交下载。",
       "latestVersion": "0.1.0",
       "logoUrl": "",
-      "githubUrl": "https://github.com/imaliang/tmdb-proxy",
-      "helpDocUrl": "https://github.com/yl948/mopie-plugins/tree/main/plugins/tmdb_proxy",
+      "githubUrl": "https://github.com/yl948/mopie-plugins",
+      "helpDocUrl": "https://github.com/yl948/mopie-plugins/tree/main/plugins/javbus",
       "payImageUrl": "",
       "versions": [
         {
           "version": "0.1.0",
-          "changeLog": "初始发布",
-          "updatedAt": "2026-09-05T17:21:47Z",
+          "changeLog": "同步本地正在使用的版本。",
+          "updatedAt": "2026-09-24T08:40:22Z",
           "minAppVersion": "1.0.0",
-          "downloadUrl": "https://github.com/yl948/mopie-plugins/releases/download/tmdb_proxy-0.1.0/tmdb_proxy.zip"
+          "downloadUrl": "https://raw.githubusercontent.com/yl948/mopie-plugins/main/dist/javbus.zip"
         }
       ],
       "configField": [
         {
-          "fieldName": "api_key",
+          "fieldName": "proxy",
           "fieldType": "String",
-          "label": "TMDB API Key",
-          "helperText": "在 themoviedb.org/settings/api 获取，v3 auth 格式",
-          "required": true
+          "label": "HTTP 代理",
+          "helperText": "仅用于 JavBus 请求；留空则直连。",
+          "defaultValue": ""
         },
         {
-          "fieldName": "proxy_mode",
-          "fieldType": "Enum",
-          "label": "代理方式",
-          "helperText": "选择如何访问 TMDB API",
-          "defaultValue": "vercel",
-          "enumValues": {
-            "vercel": "Vercel 反代（推荐，免费）",
-            "http": "HTTP 代理（已有代理服务器时使用）"
-          },
-          "required": true
-        },
-        {
-          "fieldName": "vercel_domain",
+          "fieldName": "cookie",
           "fieldType": "String",
-          "label": "Vercel 自定义域名",
-          "helperText": "部署到 Vercel 后绑定的域名，如 tmdb.yourdomain.com"
-        },
-        {
-          "fieldName": "http_proxy",
-          "fieldType": "String",
-          "label": "HTTP 代理地址",
-          "helperText": "代理方式选 HTTP 时填写，如 http://192.168.1.1:7890"
+          "label": "JavBus Cookie",
+          "helperText": "浏览器确认年龄后的 Cookie。留空则只访问公开列表。保存在插件配置中。",
+          "defaultValue": ""
         }
       ],
       "dependencies": {
@@ -161,10 +166,10 @@
       "versions": [
         {
           "version": "0.2.0",
-          "changeLog": "初始发布",
-          "updatedAt": "2026-09-05T17:21:47Z",
-          "minAppVersion": "1.11.0",
-          "downloadUrl": "https://github.com/yl948/mopie-plugins/releases/download/missav_metadata-0.2.0/missav_metadata.zip"
+          "changeLog": "同步本地正在使用的版本。",
+          "updatedAt": "2026-09-24T08:40:22Z",
+          "minAppVersion": "1.0.0",
+          "downloadUrl": "https://raw.githubusercontent.com/yl948/mopie-plugins/main/dist/missav_metadata.zip"
         }
       ],
       "configField": [
@@ -208,7 +213,7 @@
         }
       ],
       "dependencies": {
-        "appVersion": ">=1.11.0"
+        "appVersion": ">=1.0.0"
       }
     }
   ]
