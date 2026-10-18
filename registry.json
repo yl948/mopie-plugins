@@ -5,12 +5,19 @@
       "title": "B站荐片",
       "author": "Mopie",
       "description": "关注影评 UP，从标题识别片名并展示 TMDB 海报。不自动订阅。",
-      "latestVersion": "0.1.4",
+      "latestVersion": "0.1.5",
       "logoUrl": "",
       "githubUrl": "https://github.com/yl948/mopie-plugins",
       "helpDocUrl": "https://github.com/yl948/mopie-plugins/tree/main/plugins/bili-up",
       "payImageUrl": "",
       "versions": [
+        {
+          "version": "0.1.5",
+          "changeLog": "同时提供 ARM 和 x86 程序。",
+          "updatedAt": "2026-10-18T16:10:00Z",
+          "minAppVersion": "1.0.0",
+          "downloadUrl": "https://raw.githubusercontent.com/yl948/mopie-plugins/main/dist/bili-up.zip"
+        },
         {
           "version": "0.1.4",
           "changeLog": "海报列表分页；下一页继续拉更早的投稿。",
