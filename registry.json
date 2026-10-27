@@ -133,12 +133,19 @@
       "title": "JavBus 搜索",
       "author": "Mopie",
       "description": "按番号搜索 JavBus 影片资料并查看、复制磁力链接，不会自动提交下载。",
-      "latestVersion": "0.1.1",
+      "latestVersion": "0.1.2",
       "logoUrl": "",
       "githubUrl": "https://github.com/yl948/mopie-plugins",
       "helpDocUrl": "https://github.com/yl948/mopie-plugins/tree/main/plugins/javbus",
       "payImageUrl": "",
       "versions": [
+        {
+          "version": "0.1.2",
+          "changeLog": "更换插件 logo（扁平风）。",
+          "updatedAt": "2026-10-28T18:00:00Z",
+          "minAppVersion": "1.0.0",
+          "downloadUrl": "https://raw.githubusercontent.com/yl948/mopie-plugins/main/dist/javbus.zip"
+        },
         {
           "version": "0.1.1",
           "changeLog": "更换插件 logo。",

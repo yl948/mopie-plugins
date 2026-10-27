@@ -4,7 +4,7 @@
   "title": "JavBus 搜索",
   "author": "Mopie",
   "description": "按番号搜索 JavBus 影片资料并查看、复制磁力链接，不会自动提交下载。",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "logoUrl": "/api/plugins/javbus/logo",
   "entry": {
     "type": "javascript",
