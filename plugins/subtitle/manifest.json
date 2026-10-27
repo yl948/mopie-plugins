@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "name": "subtitle",
+  "title": "字幕",
+  "author": "Mopie",
+  "description": "字幕页、搜索下载、保存到影片旁边，以及整理时复制外挂字幕，都由这个插件提供。关闭或卸载后这些都停止。",
+  "version": "0.1.1",
+  "logoUrl": "/api/plugins/subtitle/logo",
+  "versions": [
+    {
+      "version": "0.1.1",
+      "changeLog": "收录进插件市场，新增插件 logo。"
+    },
+    {
+      "version": "0.1.0",
+      "changeLog": "字幕搜索下载与随片整理能力开关。"
+    }
+  ],
+  "configField": [
+    {
+      "fieldName": "source_subhd",
+      "fieldType": "Bool",
+      "label": "SubHD",
+      "helperText": "打开后参与搜索。",
+      "defaultValue": true
+    },
+    {
+      "fieldName": "source_shooter",
+      "fieldType": "Bool",
+      "label": "射手",
+      "helperText": "打开后按影片哈希搜索，不需要密钥。",
+      "defaultValue": true
+    },
+    {
+      "fieldName": "source_opensubtitles",
+      "fieldType": "Bool",
+      "label": "OpenSubtitles",
+      "helperText": "打开后参与搜索。",
+      "defaultValue": true
+    },
+    {
+      "fieldName": "opensubtitles_key",
+      "fieldType": "String",
+      "label": "OpenSubtitles 密钥",
+      "helperText": "只在使用 OpenSubtitles 时填写。留空仍可搜索。",
+      "defaultValue": "",
+      "showWhen": {"field": "source_opensubtitles", "equals": true}
+    },
+    {
+      "fieldName": "source_assrt",
+      "fieldType": "Bool",
+      "label": "Assrt",
+      "helperText": "打开后还需要令牌，留空则不搜索。",
+      "defaultValue": true
+    },
+    {
+      "fieldName": "assrt_token",
+      "fieldType": "String",
+      "label": "Assrt 令牌",
+      "helperText": "只在使用 Assrt 时需要。",
+      "defaultValue": "",
+      "showWhen": {"field": "source_assrt", "equals": true}
+    }
+  ]
+}

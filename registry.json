@@ -229,6 +229,33 @@
       "dependencies": {
         "appVersion": ">=1.0.0"
       }
+    },
+    {
+      "name": "subtitle",
+      "title": "字幕",
+      "author": "Mopie",
+      "description": "字幕页、搜索下载、保存到影片旁边，以及整理时复制外挂字幕，都由这个插件提供。关闭或卸载后这些都停止。",
+      "latestVersion": "0.1.1",
+      "logoUrl": "",
+      "githubUrl": "https://github.com/yl948/mopie-plugins",
+      "helpDocUrl": "https://github.com/yl948/mopie-plugins/tree/main/plugins/subtitle",
+      "payImageUrl": "",
+      "versions": [
+        {
+          "version": "0.1.1",
+          "changeLog": "收录进插件市场，新增插件 logo。",
+          "updatedAt": "2026-10-28T16:00:00Z",
+          "minAppVersion": "0.26.0",
+          "downloadUrl": "https://raw.githubusercontent.com/yl948/mopie-plugins/main/dist/subtitle.zip"
+        },
+        {
+          "version": "0.1.0",
+          "changeLog": "字幕搜索下载与随片整理能力开关。",
+          "updatedAt": "2026-10-19T00:00:00Z",
+          "minAppVersion": "0.26.0",
+          "downloadUrl": "https://raw.githubusercontent.com/yl948/mopie-plugins/main/dist/subtitle.zip"
+        }
+      ]
     }
   ]
 }
